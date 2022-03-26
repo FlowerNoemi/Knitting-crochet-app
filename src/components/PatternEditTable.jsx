@@ -16,78 +16,78 @@ const createSortHandler = (property) => (event) => {
 };
 
 const headCells = [
-    {
-      id: 'id',
-      numeric: true,
-      disablePadding: true,
-      label: 'ID',
-    },
-    {
-      id: 'name',
-      numeric: false,
-      disablePadding: false,
-      label: 'Name',
-    },
-    {
-      id: 'craft',
-      numeric: false,
-      disablePadding: false,
-      label: 'Craft',
-    },
-    {
-      id: 'difficulty',
-      numeric: false,
-      disablePadding: false,
-      label: 'Difficulty',
-    },
-    {
-      id: 'hookSize',
-      numeric: true,
-      disablePadding: false,
-      label: 'Hook Size',
-    },
-    ];
+      {
+        id: 'id',
+        numeric: true,
+        disablePadding: true,
+        label: 'ID',
+      },
+      {
+        id: 'name',
+        numeric: false,
+        disablePadding: false,
+        label: 'Name',
+      },
+      {
+        id: 'craft',
+        numeric: false,
+        disablePadding: false,
+        label: 'Craft',
+      },
+      {
+        id: 'difficulty',
+        numeric: false,
+        disablePadding: false,
+        label: 'Difficulty',
+      },
+      {
+        id: 'hookSize',
+        numeric: true,
+        disablePadding: false,
+        label: 'Hook Size',
+      },
+      ];
 
 
-return (
-  <TableHead>
-    <TableRow>
-      <TableCell padding="checkbox">
-        <Checkbox
-          color="primary"
-          indeterminate={numSelected > 0 && numSelected < rowCount}
-          checked={rowCount > 0 && numSelected === rowCount}
-          onChange={onSelectAllClick}
-          inputProps={{
-            'aria-label': 'select all desserts',
-          }}
-        />
-      </TableCell>
-      {headCells.map((headCells) => (
-        <TableCell
-          key={headCells.id}
-          align={headCells.numeric ? 'right' : 'left'}
-          padding={headCells.disablePadding ? 'none' : 'normal'}
-          sortDirection={orderBy === headCells.id ? order : false}
-        >
-          <TableSortLabel
-            active={orderBy === headCells.id}
-            direction={orderBy === headCells.id ? order : 'asc'}
-            onClick={createSortHandler(headCells.id)}
-          >
-            {headCells.label}
-            {orderBy === headCells.id ? (
-              <Box component="span" sx={visuallyHidden}>
-                {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-              </Box>
-            ) : null}
-          </TableSortLabel>
+  return (
+    <TableHead>
+      <TableRow>
+        <TableCell padding="checkbox">
+          <Checkbox
+            color="primary"
+            indeterminate={numSelected > 0 && numSelected < rowCount}
+            checked={rowCount > 0 && numSelected === rowCount}
+            onChange={onSelectAllClick}
+            inputProps={{
+              'aria-label': 'select all patterns',
+            }}
+          />
         </TableCell>
-      ))}
-    </TableRow>
-  </TableHead>
-);
-}
+        {headCells.map((headCells) => (
+          <TableCell
+            key={headCells.id}
+            align={headCells.numeric ? 'right' : 'left'}
+            padding={headCells.disablePadding ? 'none' : 'normal'}
+            sortDirection={orderBy === headCells.id ? order : false}
+          >
+            <TableSortLabel
+              active={orderBy === headCells.id}
+              direction={orderBy === headCells.id ? order : 'asc'}
+              onClick={createSortHandler(headCells.id)}
+            >
+              {headCells.label}
+              {orderBy === headCells.id ? (
+                <Box component="span" sx={visuallyHidden}>
+                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                </Box>
+              ) : null}
+            </TableSortLabel>
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
+  }
 
 EnhancedTableHead.propTypes = {
 numSelected: PropTypes.number.isRequired,
