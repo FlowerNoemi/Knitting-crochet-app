@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+
+body {
+    background-color: #ccb7c140;
+    background-image: url('../../assets/bg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 40% 60%;
+    background-attachment:fixed;
+    
+}
+
+.container {
+    background-color: #ccb7c160;
+    max-width: 800px;
+    margin: 0 auto;
+    height: 500px;
+    box-sizing: border-box;
+    box-shadow: #ccb7c190;
+    border-radius: 20px;
+    
+}
+
+
+
+.container > .title {
+    font-family: 'Pacifico', 'Roboto', sans-serif;
+    background-color: #ccb7c199;
+    font-size: clamp(1rem, 9vw, 4rem);
+    text-align: center;
+    border-radius: 20px;
+}
+
+.container > .stackBtn > .largebtn {
+    background-color: #ccb7c1;
+    min-width: 200px;
+    height: 100px; 
+    margin: 0 auto;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    font-size: clamp(0.5rem, 6vw, 1rem);
+}
+
+.container > .stackBtn > .largebtn:hover {
+    background-color: #9c8791;
+    cursor: initial;
+}
+
+.largebtn > .largelink {
+    text-decoration: none;
+}
+
+.largebtn > .largelink:hover {
+    text-decoration: none;
+    cursor: pointer;
+}
