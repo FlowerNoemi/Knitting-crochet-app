@@ -1,43 +1,60 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './pattern.css';
-import { useState } from 'react';
-import { Button } from '@mui/material';
-import axios from "axios";
-
-
-
-
+import ImgMediaCard from '../../components/CardElement';
+import { Box } from '@mui/system';
+import {getAllPatterns} from '../../components/httpsreq/patterns';
+import Container from '@mui/material/Container';
 
 const Pattern = () => {
-    const [patterns, setPatterns] = useState([]);
-    const [selectedPattern, setSelectedPattern] = useState({});
+    const [patterns, setPatterns] = useState(['']);
+    const [loading, setLoading] = useState(false);
 
 
-    const patternsPDF = async (id) => {
-        axios(`http://localhost:8080/api/v1/pattern/${id}` , {
-           method: "GET",
-           responseType: "blob"
-         })
-           .then((response) => {
-             const file = new Blob([response.data], {
-               type: "application/pdf"
-             });
-             const fileURL = URL.createObjectURL(file); 
-             window.open(fileURL);
-             console.log('cica')
-         })
-       
-       .catch(error => {
-         console.log(error);
-       });
-   };
-   
+    const loadPatterns = async ()  => {
+    try {
+      const patternsRequest = await  getAllPatterns();
+      setPatterns(patternsRequest);
+    
+    } catch(e) {
+      console.log('hiba volt : ', e);
+    }
+    };
+  
+     useEffect(() => {
+        let timer = setTimeout(() => {
+        loadPatterns();
+        setLoading(true);
+    }, 1500)
+
+    return () => { clearTimeout(timer)
+    }
+    }, [patterns]);
+
     return (
-        <div className='box'>
-        <h1>Pattern</h1>
-        <Button onClick={patternsPDF}>cicafej</Button>
+        <div>
+            {!loading && 
+            <p>Loading...</p>
+            }
+            {loading &&
+            <Container  maxWidth="xxl">
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                        mx:'auto',
+                        px:2,
+                        bgcolor: 'background.paper',
+                        borderRadius: 3
+                    }}
+                    >
+                    {patterns.map(pattern=> (
+                    <ImgMediaCard key = {pattern.id} {...pattern}/>
+                    ))}
+                </Box>
+            </Container>} 
         </div>
-    );
+    )
 };
 
 

@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
+import React, { useEffect, useState} from 'react';
+import EnhancedTableHead from '../../components/EnhancedTableHead';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -8,271 +7,272 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import EnhancedTableHead from '../../components/PatternEditTable';
+import axios from 'axios';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import {getAllPatterns} from '../../components/httpsreq/patterns';
 import { Button } from '@mui/material';
+import DataForm from '../../components/DataForm';
+import './patternEdit.css'
 
 
+const EnhancedTable = () => { 
+    const [order, setOrder] = useState('asc');
+    const [orderBy, setOrderBy] = useState('calories');
+    const [selected, setSelected] = useState([]);
+    const [page, setPage] = useState(0);
+    const [dense, setDense] = useState(false);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [patterns, setPatterns] = useState(['']);
+    const [loading, setLoading] = useState(false);
+    const [newPatternChange, setnewPatternChange] = useState(false);
 
 
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
+    const loadPatterns = async ()  => {
+        try {
+        const patternsRequest = await  getAllPatterns();
+        setPatterns(patternsRequest);
+        
+        } catch(e) {
+        console.log('hiba volt : ', e);
+        }
+    };
+    
+    useEffect(() => {
+    let timer = setTimeout(() => {
+        loadPatterns();
+        setLoading(true);
+    }, 1000)
+    return () => { clearTimeout(timer)
+    }
+    }, [patterns]);
+        
 
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
+    const deletePattern =  (id) => {
+    if(selected.length > 0) {
+        const response = axios.delete(`http://localhost:8080/api/v1/pattern/patterndelete/${id}` , {
+        method: "DELETE"
+    })
+    if (response.status === 200) {
+        const pattern = patterns.find((onePattern) => onePattern.id === id);
+        const index = patterns.indexOf(pattern);
+        const newPatternArray = [...patterns];
+        newPatternArray.splice(index, 1);
+        setPatterns(newPatternArray);
+    }
+    } 
+    }
 
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
+    const onClickpatternEditForm = () => {
+        console.log('cica');
+        setnewPatternChange(true);
+    }
+
+    const descendingComparator = (a, b, orderBy) => {
+    if (b[orderBy] < a[orderBy]) {
+        return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+        return 1;
+    }
+        return 0;
+    }
+            
+    const getComparator= (order, orderBy) => {
+        return order === 'desc'
+        ? (a, b) => descendingComparator(a, b, orderBy)
+        : (a, b) => -descendingComparator(a, b, orderBy);
+    }
+            
+    const  stableSort = (array, comparator) => {
+    const stabilizedThis =array.map((el, id) => [el, id]);
+        stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) {
-      return order;
+        return order;
     }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
+        return a[1] - b[1];
+        });
+        return stabilizedThis.map((el) => el[0]);
+    } 
 
 
-const EnhancedTableToolbar = (props) => {
-  const { numSelected } = props;
-
-  return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        }),
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Pattern Editor
-        </Typography>
-      )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon/>
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
-  );
-};
-
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
-
-const EnhancedTable = () => {
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
-  const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [patterns, setPatterns] = useState([]);
-
-  const fetchpatterns = () => {
-    fetch('http://localhost:8080/api/v1/pattern/patterndata')
-        .then((result) => result.json())
-        .then((data) => {
-          setPatterns(data);
-
-      })
-    console.log('cica')
-  };
-
-
-
-  const handleRequestSort = (event, property) => {
+    const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
-  };
+    };
 
-  const handleSelectAllClick = (event) => {
+    const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = patterns.map((n) => n.id);
-      setSelected(newSelecteds);
-      return;
+    const newSelecteds = patterns.map((n) => n.id);
+    setSelected(newSelecteds);
+        return;
     }
-    setSelected([]);
-  };
+        setSelected([]);
+    };
 
-  const handleClick = (event, id) => {
+    const handleClick = (event, id) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
+        newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
+        newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
+        newSelected = newSelected.concat(selected.slice(0, -1));
     } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
+        newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
         selected.slice(selectedIndex + 1),
-      );
+        );
     }
+        setSelected(newSelected);
+    };
 
-    setSelected(newSelected);
-  };
-
-  const handleChangePage = (event, newPage) => {
+    const handleChangePage = (event, newPage) => {
     setPage(newPage);
-  };
+    };
 
-  const handleChangeRowsPerPage = (event) => {
+    const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-  };
+    };
 
-  const handleChangeDense = (event) => {
+    const handleChangeDense = (event) => {
     setDense(event.target.checked);
-  };
+    };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
-
-  const emptyRows =
+    const isSelected = (id) => selected.indexOf(id) !== -1;
+    
+    const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - patterns.length) : 0;
 
-  return (
-    
-    <Box sx={{ width: '100%' }}>
-      <Button onClick={fetchpatterns}>Show patterns</Button>
-      <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
-          >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={patterns.length}
-            />
-            <TableBody>
-
-              {stableSort(patterns, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((patterns, index) => {
-                  const isItemSelected = isSelected(patterns.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-                  return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, patterns.id)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={patterns.id}
-                      selected={isItemSelected}
-                      
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                        align="right"
-                      >
-                        {patterns.id}
-                      </TableCell>
-                      <TableCell align="left">{patterns.name}</TableCell>
-                      <TableCell align="left">{patterns.craft}</TableCell>
-                      <TableCell align="left">{patterns.difficulty}</TableCell>
-                      <TableCell align="right">{patterns.hookSize}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={patterns.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
-    </Box>
-  );
+    return (
+        <div>
+            {!loading && 
+            <p>It's loading</p>
+            }
+            {loading &&
+                <Box sx={{ width: '100%' }} key={patterns.id}>
+                <Paper sx={{ width: '100%', mt: 2, mx: 'auto' }}>
+                    <Toolbar>
+                        <Typography
+                            sx={{ flex: '1 1 100%' }}
+                            variant="h6"
+                            id="tableTitle"
+                            component="div"
+                            >
+                            Pattern Editor
+                        </Typography>
+                    </Toolbar>
+                    <TableContainer>
+                            <Table
+                            sx={{ minWidth: 700 }}
+                            aria-labelledby="tableTitle"
+                            size={dense ? 'small' : 'medium'}
+                            >
+                            <EnhancedTableHead
+                            numSelected={selected.length}
+                            order={order}
+                            orderBy={orderBy}
+                            onSelectAllClick={handleSelectAllClick}
+                            onRequestSort={handleRequestSort}
+                            rowCount={patterns.length}
+                            />
+                    <TableBody>
+                    {stableSort(patterns, getComparator(order, orderBy))
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((patterns, id) => {
+                            const isItemSelected = isSelected(patterns.id);
+                            const labelId = `enhanced-table-checkbox-${id}`;
+                        return (
+                        <TableRow
+                            hover
+                            onClick={(event) => handleClick(event, patterns.id)}
+                            role="checkbox"
+                            aria-checked={isItemSelected}
+                            tabIndex={-1}
+                            selected={isItemSelected}
+                            key={patterns.id}
+                        >
+                            <TableCell padding="checkbox">
+                                <Checkbox
+                                color="primary"
+                                checked={isItemSelected}
+                                inputProps={{
+                                'aria-labelledby': labelId,
+                            }}
+                            />
+                            </TableCell>
+                            <TableCell
+                                component="th"
+                                id={labelId}
+                                scope="row"
+                                padding="none"
+                                align="right"
+                            >
+                            {patterns.id}
+                            </TableCell>
+                            <TableCell align="left" >{patterns.name}</TableCell>
+                            <TableCell align="left" >{patterns.craft}</TableCell>
+                            <TableCell align="left" >{patterns.difficulty}</TableCell>
+                            <TableCell align="right" >{patterns.hookSize}</TableCell>
+                            <TableCell align='right'>
+                                <Tooltip title="Delete">
+                                    <IconButton 
+                                        onClick={() => deletePattern(patterns.id)}
+                                        selected={isItemSelected}>
+                                    <DeleteIcon/>
+                                    </IconButton>
+                                </Tooltip>
+                            </TableCell>
+                        </TableRow>
+                        );
+                        })}
+                        {emptyRows > 0 && (
+                        <TableRow
+                        style={{
+                            height: (dense ? 33 : 53) * emptyRows,
+                        }}
+                        >
+                        <TableCell colSpan={6} />
+                        </TableRow>
+                    )}
+                    </TableBody>
+                </Table>
+                </TableContainer>
+                <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={patterns.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}  
+                />
+            </Paper>
+                <FormControlLabel
+                    control={<Switch checked={dense} onChange={handleChangeDense} />}
+                    label="Dense padding"
+                />
+                <Button onClick={onClickpatternEditForm}>Pattern Create</Button>
+                {newPatternChange ? 
+                <div className='DataFormPage'>
+                    <DataForm/>
+                    </div>
+                :null}
+            </Box>}
+        </div>
+    );
 }
 
 export default EnhancedTable;

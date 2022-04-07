@@ -14,9 +14,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Hamburger from 'hamburger-react';
 
 
-
-
-
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [isOpen, setOpen] = useState(false)
@@ -33,7 +30,7 @@ const ResponsiveAppBar = () => {
 
   return (
     <AppBar className='NavBar'  position="static" sx={{bgcolor: '#F5F5F4'}} >
-        <Container className='NavBarContainer' maxWidth="xl" >
+        <Container className='NavBarContainer' maxWidth="xxl" >
             <Toolbar className='ToolBarContainer'  disableGutters >
             <img src={Logo} alt="Knitting and Crochet logo" title="Knitting and Crochet logo"className='BrandLogo' />
             <Typography
