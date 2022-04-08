@@ -71,7 +71,6 @@ const EnhancedTable = () => {
     }
 
     const onClickpatternEditForm = () => {
-        console.log('cica');
         setnewPatternChange(true);
     }
 
