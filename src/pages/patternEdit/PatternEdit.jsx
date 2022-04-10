@@ -217,7 +217,7 @@ const EnhancedTable = () => {
                                 id={labelId}
                                 scope="row"
                                 padding="none"
-                                align="right"
+                                align="left"
                             >
                             {patterns.id}
                             </TableCell>

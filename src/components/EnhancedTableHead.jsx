@@ -20,7 +20,7 @@ const EnhancedTableHead = (props) => {
 	const headCells = [
 		{
 		id: 'id',
-		numeric: true,
+		numeric: false,
 		disablePadding: true,
 		label: 'ID',
 		},

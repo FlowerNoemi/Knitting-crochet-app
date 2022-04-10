@@ -3,17 +3,24 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import axios from 'axios';
+import './dataform.css';
 
 const MultilineTextFields = () => {
-    const [newPatternChange, setnewPatternChange] = useState('block');
+    const [isShown, setIsShown] = useState(false);
+
+
+
     const [data, setData] = useState({
       name:'',
       craft:'',
       difficulty:'',
       hookSize:'',
       url:'',
+      selectedFile: null,
       patternPDF:'',
-    })
+    });
+
+ 
 
     const handleChange = (e) => {
       const value = e.target.value;
@@ -24,8 +31,6 @@ const MultilineTextFields = () => {
     };
 
 
-
-
     const handleSubmit = async (e) => { 
       e.preventDefault();
       const formData = {
@@ -34,27 +39,23 @@ const MultilineTextFields = () => {
         difficulty: data.difficulty,
         hookSize: data.hookSize,
         url: data.url,
+        selectedFile: data.selectedFile,
         patternPDF: data.patternPDF,
 
       };
         await axios.post('http://localhost:8080/api/v1/pattern/patterns', formData).then((response) => {
           console.log(response.status);
-          console.log(response.data.token);
-        })
-        return (setnewPatternChange('none'))
-    
-      }    
-
+        })  
+    }    
+   
     return (
         <Box
             component="form"
-            sx={{
-                '& .MuiTextField-root': { m: 1, width: '25ch' },
-            }}
+            sx={{'& .MuiTextField-root': { m: 1, width: '25ch' },}}
             noValidate
             autoComplete="off"
-        >
-            <div onSubmit={(e) => handleSubmit(e)} className={newPatternChange}>
+        > 
+            <form onSubmit={(e) => handleSubmit(e)}  >
                 <div>
                     <TextField
                     id='name'
@@ -127,9 +128,10 @@ const MultilineTextFields = () => {
                     onChange={handleChange}
                     />
                 </div>
-                
-            </div>
-            <Button type='submit' onClick={handleSubmit}  >New Pattern</Button>
+                <Button type='submit' onClick={handleSubmit} >New Pattern</Button> 
+                <Button type='submit' value={isShown} onClick={(e) => setIsShown(e)} >End of intake</Button> 
+            </form>
+            
         </Box>
   );
 }
