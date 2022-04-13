@@ -1,9 +1,7 @@
 import React from 'react';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -22,7 +20,7 @@ const ImgMediaCard = ({ name, id, craft, difficulty, hookSize, url, patternPDF})
                 alt={name}
                 height={200}
                 width={200}
-                image={process.env.PUBLIC_URL + url}
+                image={url}
                 key={url}
                 sx={{borderRadius: 3 , pt:1}}
             />
@@ -36,7 +34,7 @@ const ImgMediaCard = ({ name, id, craft, difficulty, hookSize, url, patternPDF})
                 value={name} 
                 sx={{ mt: 2}}
                 key={name}
-                minHeight={40}
+                height={60}
                 marginBottom={3} 
             >
                 {name}
@@ -48,10 +46,6 @@ const ImgMediaCard = ({ name, id, craft, difficulty, hookSize, url, patternPDF})
                 Difficulty: {difficulty} 
             </Typography>
             </CardContent>
-            <CardActions
-            sx={{ mb: 2}}>
-                <Button size="small" >Download Pattern</Button>
-            </CardActions>
         </Card>
     );
 }

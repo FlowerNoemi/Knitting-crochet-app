@@ -1,7 +1,15 @@
-.DataFormPage {
+.dataFormPage {
     position: fixed;
-    top: 20px;
-    background-color: beige;
+    top: 150px;
+    background-color: #f3f3f1;
     left: 20%
     
+}
+
+.dataFormPage > .dataformpageButton , .dataCreate > .dataformpageButton {
+    background-color: #78154a;;
+}
+
+.dataFormPage > .dataformpageButton:hover , .dataCreate > .dataformpageButton:hover  {
+    background-color: #620f3b;;
 }

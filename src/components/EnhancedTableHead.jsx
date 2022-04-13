@@ -6,12 +6,12 @@ import Box from '@mui/material/Box';
 import TableCell from '@mui/material/TableCell';
 import PropTypes from 'prop-types';
 import TableRow from '@mui/material/TableRow';
-import Checkbox from '@mui/material/Checkbox';
+
 
 
 
 const EnhancedTableHead = (props) => {
-	const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+	const { order, orderBy, onRequestSort } =
 		props;
 	const createSortHandler = (property) => (event) => {
 		onRequestSort(event, property);
@@ -20,7 +20,7 @@ const EnhancedTableHead = (props) => {
 	const headCells = [
 		{
 		id: 'id',
-		numeric: false,
+		numeric: true,
 		disablePadding: true,
 		label: 'ID',
 		},
@@ -60,15 +60,6 @@ const EnhancedTableHead = (props) => {
       	<TableHead>
 			<TableRow>
 				<TableCell padding="checkbox">
-					<Checkbox
-					color="primary"
-					indeterminate={numSelected > 0 && numSelected < rowCount}
-					checked={rowCount > 0 && numSelected === rowCount}
-					onChange={onSelectAllClick}
-					inputProps={{
-						'aria-label': 'select all patterns',
-					}}
-					/>
 				</TableCell>
 			{headCells.map((headCells) => (
 				<TableCell

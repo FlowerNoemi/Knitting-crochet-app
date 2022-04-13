@@ -46,8 +46,8 @@ const EnhancedTable = () => {
     };
     
     useEffect(() => {
-    let timer = setTimeout(() => {
-        loadPatterns();
+    let timer = setTimeout((e) => {
+        loadPatterns(e);
         setLoading(true);
     }, 1000)
     return () => { clearTimeout(timer)
@@ -63,8 +63,10 @@ const EnhancedTable = () => {
     if (response.status === 200) {
         const pattern = patterns.find((onePattern) => onePattern.id === id);
         const index = patterns.indexOf(pattern);
+        
         const newPatternArray = [...patterns];
         newPatternArray.splice(index, 1);
+        
         setPatterns(newPatternArray);
     }
     } 
@@ -74,6 +76,9 @@ const EnhancedTable = () => {
         setnewPatternChange(true);
     }
 
+    const onClickpatternEditFormClose = () =>  {
+        setnewPatternChange(false);
+    }
     const descendingComparator = (a, b, orderBy) => {
     if (b[orderBy] < a[orderBy]) {
         return -1;
@@ -118,24 +123,19 @@ const EnhancedTable = () => {
         setSelected([]);
     };
 
-    const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
 
-    if (selectedIndex === -1) {
-        newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-        newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-        newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-        newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-        );
-    }
-        setSelected(newSelected);
-    };
+    const handleClick = (event, id) => {
+        const selectedIndex = selected.indexOf(id);
+        let newSelected = [];
+    
+        if (selectedIndex === -1) {
+            newSelected = newSelected.concat(selected, id);
+        } else if (selectedIndex === 0) {
+            newSelected = newSelected.concat(selected.slice(1));
+        }
+            setSelected(newSelected);
+        };
+    
 
     const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -161,7 +161,7 @@ const EnhancedTable = () => {
             <p>It's loading</p>
             }
             {loading &&
-                <Box sx={{ width: '100%' }} key={patterns.id}>
+                <Box sx={{ width: '100%' }}>
                 <Paper sx={{ width: '100%', mt: 2, mx: 'auto' }}>
                     <Toolbar>
                         <Typography
@@ -173,35 +173,35 @@ const EnhancedTable = () => {
                             Pattern Editor
                         </Typography>
                     </Toolbar>
-                    <TableContainer>
-                            <Table
-                            sx={{ minWidth: 700 }}
-                            aria-labelledby="tableTitle"
-                            size={dense ? 'small' : 'medium'}
-                            >
-                            <EnhancedTableHead
-                            numSelected={selected.length}
-                            order={order}
-                            orderBy={orderBy}
-                            onSelectAllClick={handleSelectAllClick}
-                            onRequestSort={handleRequestSort}
-                            rowCount={patterns.length}
-                            />
+                <TableContainer>
+                    <Table
+                        sx={{ minWidth: 700 }}
+                        aria-labelledby="tableTitle"
+                        size={dense ? 'small' : 'medium'}
+                        >
+                    <EnhancedTableHead
+                        numSelected={selected.length}
+                        order={order}
+                        orderBy={orderBy}
+                        onSelectAllClick={handleSelectAllClick}
+                        onRequestSort={handleRequestSort}
+                        rowCount={patterns.length}
+                    />
                     <TableBody>
                     {stableSort(patterns, getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((patterns, id) => {
-                            const isItemSelected = isSelected(patterns.id);
+                    .map((pattern, id) => {
+                            const isItemSelected = isSelected(id);
                             const labelId = `enhanced-table-checkbox-${id}`;
                         return (
                         <TableRow
                             hover
-                            onClick={(event) => handleClick(event, patterns.id)}
+                            onClick={(event) => handleClick(event, id)}
                             role="checkbox"
                             aria-checked={isItemSelected}
                             tabIndex={-1}
                             selected={isItemSelected}
-                            key={patterns.id}
+                            key={id}
                         >
                             <TableCell padding="checkbox">
                                 <Checkbox
@@ -217,19 +217,21 @@ const EnhancedTable = () => {
                                 id={labelId}
                                 scope="row"
                                 padding="none"
-                                align="left"
+                                align="right"
+                              
                             >
-                            {patterns.id}
+                            {pattern.id}
                             </TableCell>
-                            <TableCell align="left" >{patterns.name}</TableCell>
-                            <TableCell align="left" >{patterns.craft}</TableCell>
-                            <TableCell align="left" >{patterns.difficulty}</TableCell>
-                            <TableCell align="right" >{patterns.hookSize}</TableCell>
+                            <TableCell align="left" key={pattern.name} >{pattern.name}</TableCell>
+                            <TableCell align="left" key={pattern.craft}>{pattern.craft}</TableCell>
+                            <TableCell align="left" key={pattern.difficulty}>{pattern.difficulty}</TableCell>
+                            <TableCell align="right" key={pattern.hookSize} >{pattern.hookSize}</TableCell>
                             <TableCell align='right'>
                                 <Tooltip title="Delete">
                                     <IconButton 
-                                        onClick={() => deletePattern(patterns.id)}
-                                        selected={isItemSelected}>
+                                        onClick={() => deletePattern(pattern.id)}
+                                        selected={isItemSelected}
+                                        >  
                                     <DeleteIcon/>
                                     </IconButton>
                                 </Tooltip>
@@ -263,10 +265,14 @@ const EnhancedTable = () => {
                     control={<Switch checked={dense} onChange={handleChangeDense} />}
                     label="Dense padding"
                 />
-                <Button onClick={onClickpatternEditForm}>Pattern Create</Button>
+                <div className='dataCreate'>
+                <Button onClick={onClickpatternEditForm} variant="contained" className='dataformpageButton'>Pattern Create</Button>
+                
+                </div>
                 {newPatternChange ? 
-                <div className='DataFormPage'>
+                <div className='dataFormPage'>
                     <DataForm/>
+                    <Button variant="contained" sx={{m: 1 }} onClick={onClickpatternEditFormClose} className='dataformpageButton'>Pattern Create Closed</Button>
                     </div>
                 :null}
             </Box>}

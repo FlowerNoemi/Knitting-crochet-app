@@ -1,0 +1,7 @@
+.dataFormPageBtnBlock > .dataformpageButton  {
+    background-color: #78154a;;
+}
+
+.dataFormPageBtnBlock > .dataformpageButton:hover {
+    background-color: #620f3b;;
+}

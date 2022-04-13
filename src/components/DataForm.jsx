@@ -1,15 +1,17 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import axios from 'axios';
 import './dataform.css';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+
 
 const MultilineTextFields = () => {
-    const [isShown, setIsShown] = useState(false);
-
-
-
+	const [disabled, setDisabled] = useState(true)
     const [data, setData] = useState({
       name:'',
       craft:'',
@@ -17,10 +19,8 @@ const MultilineTextFields = () => {
       hookSize:'',
       url:'',
       selectedFile: null,
-      patternPDF:'',
     });
 
- 
 
     const handleChange = (e) => {
       const value = e.target.value;
@@ -28,11 +28,31 @@ const MultilineTextFields = () => {
         ...data,
         [e.target.name]: value
       });
+      
+	  
     };
+	const CheckData = (e) => {
+		const craftData = data.craft;
+		const nameData = data.name;
+		const hookSizeData = data.hookSize;
+		const urlData = data.url;
+
+		if(nameData.length !== 0 && craftData.length !== 0 && hookSizeData.length !== 0 && urlData.length !== 0 ) {
+			 setDisabled(false)
+		}
+		if(craftData === '' || nameData.length === 0 || hookSizeData.length === 0 || urlData.length === 0) {
+			setDisabled(true)
+		}
+	}
+
+	useEffect(() => {
+		CheckData();
+	})
 
 
-    const handleSubmit = async (e) => { 
-      e.preventDefault();
+    const handleSubmit = async (e) => {    
+		
+        e.preventDefault();
       const formData = {
         name: data.name,
         craft: data.craft,
@@ -40,9 +60,9 @@ const MultilineTextFields = () => {
         hookSize: data.hookSize,
         url: data.url,
         selectedFile: data.selectedFile,
-        patternPDF: data.patternPDF,
-
+		
       };
+	  
         await axios.post('http://localhost:8080/api/v1/pattern/patterns', formData).then((response) => {
           console.log(response.status);
         })  
@@ -54,8 +74,8 @@ const MultilineTextFields = () => {
             sx={{'& .MuiTextField-root': { m: 1, width: '25ch' },}}
             noValidate
             autoComplete="off"
+            onSubmit={(e) =>  handleSubmit(e) } 
         > 
-            <form onSubmit={(e) => handleSubmit(e)}  >
                 <div>
                     <TextField
                     id='name'
@@ -65,33 +85,51 @@ const MultilineTextFields = () => {
                     multiline
                     maxRows={4}
                     value={data.name}
-                    onChange={handleChange}
+                    onChange={(e) => handleChange(e) }
+					onKeyUp={(e) =>  CheckData(e)}
                     />
                 </div>
-                <div>
-                    <TextField
-                    id="craft"
-                    label='Craft'
-                    name='craft'
-                    type='text'
-                    multiline
-                    maxRows={4}
-                    value={data.craft}
-                    onChange={handleChange}
-                    />
-                </div>
-                <div>
-                <TextField
-                    id="difficulty"
-                    label='Difficulty'
-                    name='difficulty'
-                    type='text'
-                    multiline
-                    maxRows={4}
-                    value={data.difficulty}
-                    onChange={handleChange}
-                    />
-                </div>
+				<div>
+                <FormControl sx={{ m: 1,  width: '25ch' }}>
+                <InputLabel id="demo-simple-select-helper-label">Craft</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-helper-label"
+                      id="demo-simple-select-helper"
+                      value={data.craft}
+                      label="Craft"
+                      name='craft'
+                      onChange={(e) => handleChange(e)}
+					  onClick={(e) => CheckData(e) }
+                    >
+                      <MenuItem value=''>
+                        None
+                      </MenuItem>
+                      <MenuItem value={'Knitting'}>Knitting</MenuItem>
+                      <MenuItem value={'Crochet'}>Crochet</MenuItem>
+                    </Select>
+                    </FormControl>
+					</div>
+					<div>
+                    <FormControl sx={{ m: 1,  width: '25ch' }}>
+                  <InputLabel id="demo-simple-select-helper-label">Difficulty</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-helper-label"
+                        id="demo-simple-select-helper"
+                        value={data.difficulty}
+                        label="Difficulty"
+                        name='difficulty'
+                        onChange={(e) => handleChange(e)}
+						            onClick={(e) => CheckData(e) }
+                      >
+                        <MenuItem value=''>
+                          None
+                        </MenuItem>
+                        <MenuItem value={'easy'}>Easy</MenuItem>
+                        <MenuItem value={'medium'}>Medium</MenuItem>
+						<MenuItem value={'difficult'}>Difficult</MenuItem>
+                      </Select>
+                      </FormControl>
+					  </div>
                 <div>
                 <TextField
                     id="hookSize"
@@ -101,7 +139,8 @@ const MultilineTextFields = () => {
                     multiline
                     maxRows={4}
                     value={data.hookSize}
-                    onChange={handleChange}
+                    onChange={(e) => handleChange(e)}
+					onKeyUp={(e) =>  CheckData(e)}
                     />
                 </div>
                 <div>
@@ -113,25 +152,13 @@ const MultilineTextFields = () => {
                     multiline
                     maxRows={4}
                     value={data.url}
-                    onChange={handleChange}
+                    onChange={(e) => handleChange(e)}
+					onKeyUp={(e) =>  CheckData(e)}
                     />
                 </div>
-                <div>
-                <TextField
-                    id="patternPDF"
-                    label='Pattern URL'
-                    name='patternPDF'
-                    type='text'
-                    multiline
-                    maxRows={4}
-                    value={data.patternPDF}
-                    onChange={handleChange}
-                    />
-                </div>
-                <Button type='submit' onClick={handleSubmit} >New Pattern</Button> 
-                <Button type='submit' value={isShown} onClick={(e) => setIsShown(e)} >End of intake</Button> 
-            </form>
-            
+                <div className='dataFormPageBtnBlock'>
+                <Button type='submit' onClick={(e) =>handleSubmit(e)}  disabled={disabled && disabled} variant="contained" sx={{m: 1 }} className='dataformpageButton' >New Pattern</Button> 
+				</div>
         </Box>
   );
 }

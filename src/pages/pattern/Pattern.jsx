@@ -30,6 +30,11 @@ const Pattern = () => {
     }
     }, [patterns]);
 
+
+    
+
+
+
     return (
         <div>
             {!loading && 
@@ -48,9 +53,10 @@ const Pattern = () => {
                         borderRadius: 3
                     }}
                     >
-                    {patterns.map(pattern=> (
-                    <ImgMediaCard key = {pattern.id} {...pattern}/>
-                    ))}
+                    {patterns.map((pattern, id)=> {
+                    return(
+                    <ImgMediaCard key = {id} {...pattern}/>
+                    )})}
                 </Box>
             </Container>} 
         </div>
