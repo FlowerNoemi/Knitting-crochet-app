@@ -2,7 +2,7 @@ import React from 'react';
 import './home.css';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import {Link} from "react-router-dom";
+import {Link} from 'react-router-dom';
 
 
 

@@ -41,7 +41,7 @@ const Pattern = () => {
             <p>Loading...</p>
             }
             {loading &&
-            <Container  maxWidth="xxl">
+            <Container  maxWidth='xxl'>
                 <Box
                     sx={{
                         display: 'flex',

@@ -7,16 +7,16 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import './card.css';
 
-const ImgMediaCard = ({ name, id, craft, difficulty, hookSize, url, patternPDF}) => {
+const ImgMediaCard = ({ name, id, craft, difficulty, hookSize, url,}) => {
 
     return (
         <Card 
-            sx={{ maxWidth: 280 , m:1, width:280, borderRadius: 3}} 
+            sx={{ maxWidth: 280 , m:1, width:280, borderRadius: 3, bgcolor: '#E6ECEF'}} 
             key={id} 
             className='cardBox'
         > 
             <CardMedia
-                component="img"
+                component='img'
                 alt={name}
                 height={200}
                 width={200}
@@ -24,13 +24,13 @@ const ImgMediaCard = ({ name, id, craft, difficulty, hookSize, url, patternPDF})
                 key={url}
                 sx={{borderRadius: 3 , pt:1}}
             />
-            <Stack direction="row" spacing={1} marginTop={2} className='craftBox'>
-            <Chip label={craft} color="success" key={craft} className='craftLabel' />
+            <Stack direction='row' spacing={1} marginTop={2} className='craftBox'>
+            <Chip label={craft} color='success' key={craft} className='craftLabel' />
             </Stack>
             <CardContent>
             <Typography 
-                gutterBottom variant="h5"
-                component="div" 
+                gutterBottom variant='h5'
+                component='div' 
                 value={name} 
                 sx={{ mt: 2}}
                 key={name}
@@ -39,10 +39,10 @@ const ImgMediaCard = ({ name, id, craft, difficulty, hookSize, url, patternPDF})
             >
                 {name}
             </Typography>
-            <Typography variant="body2" color="text.secondary" minHeight={25} marginTop={2} key={hookSize}>
+            <Typography variant='body2' color='text.secondary' minHeight={25} marginTop={2} key={hookSize}>
                 Hook Size: {hookSize} 
             </Typography>
-            <Typography variant="body2" color="text.secondary" minHeight={25} key={difficulty} >
+            <Typography variant='body2' color='text.secondary' minHeight={25} key={difficulty} >
                 Difficulty: {difficulty} 
             </Typography>
             </CardContent>

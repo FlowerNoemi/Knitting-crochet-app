@@ -41,7 +41,7 @@ const EnhancedTable = () => {
         setPatterns(patternsRequest);
         
         } catch(e) {
-        console.log('hiba volt : ', e);
+        console.log('error message : ', e);
         }
     };
     
@@ -58,7 +58,7 @@ const EnhancedTable = () => {
     const deletePattern =  (id) => {
     if(selected.length > 0) {
         const response = axios.delete(`http://localhost:8080/api/v1/pattern/patterndelete/${id}` , {
-        method: "DELETE"
+        method: 'DELETE'
     })
     if (response.status === 200) {
         const pattern = patterns.find((onePattern) => onePattern.id === id);
@@ -166,9 +166,9 @@ const EnhancedTable = () => {
                     <Toolbar>
                         <Typography
                             sx={{ flex: '1 1 100%' }}
-                            variant="h6"
-                            id="tableTitle"
-                            component="div"
+                            variant='h6'
+                            id='tableTitle'
+                            component='div'
                             >
                             Pattern Editor
                         </Typography>
@@ -176,7 +176,7 @@ const EnhancedTable = () => {
                 <TableContainer>
                     <Table
                         sx={{ minWidth: 700 }}
-                        aria-labelledby="tableTitle"
+                        aria-labelledby='tableTitle'
                         size={dense ? 'small' : 'medium'}
                         >
                     <EnhancedTableHead
@@ -197,15 +197,15 @@ const EnhancedTable = () => {
                         <TableRow
                             hover
                             onClick={(event) => handleClick(event, id)}
-                            role="checkbox"
+                            role='checkbox'
                             aria-checked={isItemSelected}
                             tabIndex={-1}
                             selected={isItemSelected}
                             key={id}
                         >
-                            <TableCell padding="checkbox">
+                            <TableCell padding='checkbox'>
                                 <Checkbox
-                                color="primary"
+                                color='primary'
                                 checked={isItemSelected}
                                 inputProps={{
                                 'aria-labelledby': labelId,
@@ -213,21 +213,21 @@ const EnhancedTable = () => {
                             />
                             </TableCell>
                             <TableCell
-                                component="th"
+                                component='th'
                                 id={labelId}
-                                scope="row"
-                                padding="none"
-                                align="right"
+                                scope='row'
+                                padding='none'
+                                align='right'
                               
                             >
                             {pattern.id}
                             </TableCell>
-                            <TableCell align="left" key={pattern.name} >{pattern.name}</TableCell>
-                            <TableCell align="left" key={pattern.craft}>{pattern.craft}</TableCell>
-                            <TableCell align="left" key={pattern.difficulty}>{pattern.difficulty}</TableCell>
-                            <TableCell align="right" key={pattern.hookSize} >{pattern.hookSize}</TableCell>
+                            <TableCell align='left' key={pattern.name} >{pattern.name}</TableCell>
+                            <TableCell align='left' key={pattern.craft}>{pattern.craft}</TableCell>
+                            <TableCell align='left' key={pattern.difficulty}>{pattern.difficulty}</TableCell>
+                            <TableCell align='right' key={pattern.hookSize} >{pattern.hookSize}</TableCell>
                             <TableCell align='right'>
-                                <Tooltip title="Delete">
+                                <Tooltip title='Delete'>
                                     <IconButton 
                                         onClick={() => deletePattern(pattern.id)}
                                         selected={isItemSelected}
@@ -253,7 +253,7 @@ const EnhancedTable = () => {
                 </TableContainer>
                 <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
-                component="div"
+                component='div'
                 count={patterns.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
@@ -262,17 +262,23 @@ const EnhancedTable = () => {
                 />
             </Paper>
                 <FormControlLabel
-                    control={<Switch checked={dense} onChange={handleChangeDense} />}
-                    label="Dense padding"
+                    control={<Switch checked={dense} onChange={handleChangeDense}/>}
+                    label='Dense padding'
                 />
                 <div className='dataCreate'>
-                <Button onClick={onClickpatternEditForm} variant="contained" className='dataformpageButton'>Pattern Create</Button>
+                <Button onClick={onClickpatternEditForm} variant='contained' className='dataformpageButton'>Pattern Create</Button>
                 
                 </div>
                 {newPatternChange ? 
                 <div className='dataFormPage'>
                     <DataForm/>
-                    <Button variant="contained" sx={{m: 1 }} onClick={onClickpatternEditFormClose} className='dataformpageButton'>Pattern Create Closed</Button>
+                    <Button 
+                    variant='contained' sx={{m: 1 }}
+                    onClick={onClickpatternEditFormClose} 
+                    className='dataformpageButton'
+                    >
+                    Pattern Create Closed
+                    </Button>
                     </div>
                 :null}
             </Box>}

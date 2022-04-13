@@ -1,7 +1,7 @@
 import React, {useState } from 'react';
-import './header.css'
+import './header.css';
 import Logo from '../assets/wool.png';
-import {Link} from "react-router-dom";
+import {Link} from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,7 +15,7 @@ import Hamburger from 'hamburger-react';
 
 
 const ResponsiveAppBar = () => {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
   const [isOpen, setOpen] = useState(false)
 
 
@@ -29,29 +29,29 @@ const ResponsiveAppBar = () => {
   };
 
   return (
-    <AppBar className='NavBar'  position="static" sx={{bgcolor: '#F5F5F4'}} >
-        <Container className='NavBarContainer' maxWidth="xxl" >
+    <AppBar className='NavBar'  position='static' sx={{bgcolor: '#F5F5F4'}} >
+        <Container className='NavBarContainer' maxWidth='xxl' >
             <Toolbar className='ToolBarContainer'  disableGutters >
-            <img src={Logo} alt="Knitting and Crochet logo" title="Knitting and Crochet logo"className='BrandLogo' />
+            <img src={Logo} alt='Knitting and Crochet logo' title='Knitting and Crochet logo'className='BrandLogo' />
             <Typography
-                variant="h6"
+                variant='h6'
                 noWrap
-                component="div"
+                component='div'
                 sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
             >
             </Typography>
             <Box className='NavBox' sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' }}}>
                 <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
+                size='large'
+                aria-label='account of current user'
+                aria-controls='menu-appbar'
+                aria-haspopup='true'
                 onClick={handleOpenNavMenu}
-                color="inherit">
+                color='inherit'>
                 <Hamburger toggled={isOpen} toggle={setOpen}  />
                 </IconButton>
                 <Menu
-                id="menu-appbar"
+                id='menu-appbar'
                 anchorEl={anchorElNav}
                 anchorOrigin={{
                     vertical: 'bottom',
@@ -82,9 +82,9 @@ const ResponsiveAppBar = () => {
                 </Menu>
             </Box>
             <Typography
-                variant="h6"
+                variant='h6'
                 noWrap
-                component="div"
+                component='div'
                 sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
             >
             </Typography>

@@ -6,6 +6,7 @@ import Home from './pages/home/Home';
 import Pattern from './pages/pattern/Pattern';
 import './index.css'
 import Header from './components/Header';
+import Footer from './components/Footer';
 import PatternEdit from './pages/patternEdit/PatternEdit';
 
 
@@ -21,6 +22,7 @@ ReactDOM.render(
             <Route path='/pattern' element={<Pattern />} />
             <Route path='/patternedit' element={<PatternEdit />} />
         </Routes>
+        <Footer/>
    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

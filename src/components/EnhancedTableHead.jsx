@@ -59,7 +59,7 @@ const EnhancedTableHead = (props) => {
     return (
       	<TableHead>
 			<TableRow>
-				<TableCell padding="checkbox">
+				<TableCell padding='checkbox'>
 				</TableCell>
 			{headCells.map((headCells) => (
 				<TableCell
@@ -75,7 +75,7 @@ const EnhancedTableHead = (props) => {
 				>
 					{headCells.label}
 					{orderBy === headCells.id ? (
-					<Box component="span" sx={visuallyHidden}>
+					<Box component='span' sx={visuallyHidden}>
 						{order === 'desc' ? 'sorted descending' : 'sorted ascending'}
 					</Box>
 					) : null}
