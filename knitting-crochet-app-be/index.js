@@ -80,16 +80,16 @@ app.delete('/api/v1/pattern/patterndelete/:id', (req, res) => {
     checkDetailsOfRequest({ req, res });
     const index = getPatterns({ id: req.params.id });
     patterns.splice(index, 1);
-    res.status(200).send('The deletion of the animal was successfully');
+    res.status(200).send('The deletion of the pattern was successfully');
  });
 
 app.post('/api/v1/pattern/patterns', (req, res) => {
     checkDetailsOfRequest({ req, res })
-        patterns.push({
+     patterns.push({
         ...req.body,
         id: patterns.length + 1
     })
-    res.status(200).send('The Pattern creation was successfully!');
+    res.status(200).send(`The Pattern creation was successfully!`);
 
 })
 
@@ -99,18 +99,17 @@ app.put('/api/v1/pattern/patterns/:id', (req, res) => {
     const index = getPatterns({ id: req.params.id });
     
     patterns[index] = {
-        ...animals[index],
+        ...patterns[index],
         ...req.body,
     };
     res.status(200).send('The update was successfully!',);
 });
 
-app.get('/api/v1/pattern/patterns/search', (req, res) => {
-    const queryKey = Object.keys(req.query);
+app.get('/api/v1/pattern/patterns/:search', (req, res) => {
+    const queryKey = Object.values(req.params);
+   const filteredPattern = patterns.filter((pattern) => pattern.craft == queryKey);
     checkDetailsOfRequest({ req, res });
-    !isSearchKeyCorrect({ searchKey: queryKey}) && res.status(400).send("The search with the given key cannot be proceed!");
-    const searchResult = patterns.find((pattern) => pattern.craft === Object.values(req.query));
-    res.status(200).send(searchResult);
+    res.status(200).send(filteredPattern);
 });
 
 
@@ -120,6 +119,13 @@ function getPatterns({ id }) {
     const pattern = patterns.find((pattern) => pattern.id === parseInt(id));
     return patterns.indexOf(pattern);
 }
+
+
+function getPatternsCraft({ craft }) {
+    const pattern = patterns.filter((pattern) => pattern.craft === craft);
+    return pattern;
+}
+
 
 function checkDetailsOfRequest({ req, res }) {
     if (req.body?.craft) { 
@@ -142,11 +148,6 @@ function isElementWithGivenIdExist({ id }) {
 function isCraftValueCorrect({ craft }) { 
     const rightValues = ['Knitting', 'Crochet'];
     return rightValues.includes(craft);
-}
-
-function isSearchKeyCorrect( { searchKey }) { 
-    const correctValue = "craft";
-    return correctValue === searchKey;
 }
 
 

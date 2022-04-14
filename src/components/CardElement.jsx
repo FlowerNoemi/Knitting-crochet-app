@@ -11,7 +11,7 @@ const ImgMediaCard = ({ name, id, craft, difficulty, hookSize, url,}) => {
 
     return (
         <Card 
-            sx={{ maxWidth: 280 , m:1, width:280, borderRadius: 3, bgcolor: '#E6ECEF'}} 
+            sx={{ mb:2 , ml:2, maxWidth:260, borderRadius: 3, bgcolor: '#E6ECEF'}} 
             key={id} 
             className='cardBox'
         > 
@@ -27,25 +27,26 @@ const ImgMediaCard = ({ name, id, craft, difficulty, hookSize, url,}) => {
             <Stack direction='row' spacing={1} marginTop={2} className='craftBox'>
             <Chip label={craft} color='success' key={craft} className='craftLabel' />
             </Stack>
-            <CardContent>
+            <CardContent >
             <Typography 
-                gutterBottom variant='h5'
+                gutterBottom variant='h6'
                 component='div' 
                 value={name} 
-                sx={{ mt: 2}}
+                sx={{ mt: 1}}
                 key={name}
                 height={60}
-                marginBottom={3} 
+                marginBottom={5} 
             >
                 {name}
             </Typography>
-            <Typography variant='body2' color='text.secondary' minHeight={25} marginTop={2} key={hookSize}>
+            <Typography variant='body2' color='text.secondary' height={25} key={hookSize}>
                 Hook Size: {hookSize} 
             </Typography>
-            <Typography variant='body2' color='text.secondary' minHeight={25} key={difficulty} >
+            <Typography variant='body2' color='text.secondary' height={25} key={difficulty} >
                 Difficulty: {difficulty} 
             </Typography>
             </CardContent>
+            
         </Card>
     );
 }

@@ -20,6 +20,7 @@ import Typography from '@mui/material/Typography';
 import {getAllPatterns} from '../../components/httpsreq/patterns';
 import { Button } from '@mui/material';
 import DataForm from '../../components/DataForm';
+import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import './patternEdit.css'
 
 
@@ -45,39 +46,63 @@ const EnhancedTable = () => {
         }
     };
     
-    useEffect(() => {
+   /* useEffect(() => {
     let timer = setTimeout((e) => {
         loadPatterns(e);
         setLoading(true);
-    }, 1000)
+    }, 6000)
     return () => { clearTimeout(timer)
     }
-    }, [patterns]);
+    }, [patterns]); */
         
 
-    const deletePattern =  (id) => {
-    if(selected.length > 0) {
-        const response = axios.delete(`http://localhost:8080/api/v1/pattern/patterndelete/${id}` , {
-        method: 'DELETE'
-    })
-    if (response.status === 200) {
-        const pattern = patterns.find((onePattern) => onePattern.id === id);
-        const index = patterns.indexOf(pattern);
-        
-        const newPatternArray = [...patterns];
-        newPatternArray.splice(index, 1);
-        
-        setPatterns(newPatternArray);
-    }
-    } 
+
+
+    useEffect(() => {
+        setLoading(true);
+        loadPatterns();    
+    } , [] 
+    );
+
+
+    useEffect(() => {
+        if(patterns.length === rowsPerPage && page > 0 )
+          {setPage(0);} 
+    }, [patterns.length, rowsPerPage, page]);
+
+
+    const deletePattern = async (id) => {
+        if(selected.length > 0) {
+            const response = await axios.delete(`http://localhost:8080/api/v1/pattern/patterndelete/${id}` , {
+            method: 'DELETE'
+        })
+        if (response.status === 200) {
+            const pattern = patterns.find((onePattern) => onePattern.id === id);
+            const index = patterns.indexOf(pattern);
+            
+            const newPatternArray = [...patterns];
+            newPatternArray.splice(index, 1);
+            setPatterns(newPatternArray);
+            }
+        } 
     }
 
+
+    const editPattern = (id) => {
+        if(selected.length > 0) {
+            console.log('cica')
+            
+        }
+    }
+ 
     const onClickpatternEditForm = () => {
         setnewPatternChange(true);
     }
 
     const onClickpatternEditFormClose = () =>  {
         setnewPatternChange(false);
+        loadPatterns()
+        setLoading(true);
     }
     const descendingComparator = (a, b, orderBy) => {
     if (b[orderBy] < a[orderBy]) {
@@ -153,7 +178,7 @@ const EnhancedTable = () => {
     const isSelected = (id) => selected.indexOf(id) !== -1;
     
     const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - patterns.length) : 0;
+    page > 0 ? Math.max(0, (0 + page) * rowsPerPage - patterns.length) : 0;
 
     return (
         <div>
@@ -161,14 +186,15 @@ const EnhancedTable = () => {
             <p>It's loading</p>
             }
             {loading &&
-                <Box sx={{ width: '100%' }}>
-                <Paper sx={{ width: '100%', mt: 2, mx: 'auto' }}>
+                <Box sx={{ maxWidth: '100%', mt:1, mb:5}}>
+                <Paper sx={{ width: '100%', mx: 'auto' }}>
                     <Toolbar>
                         <Typography
                             sx={{ flex: '1 1 100%' }}
                             variant='h6'
                             id='tableTitle'
                             component='div'
+
                             >
                             Pattern Editor
                         </Typography>
@@ -186,6 +212,7 @@ const EnhancedTable = () => {
                         onSelectAllClick={handleSelectAllClick}
                         onRequestSort={handleRequestSort}
                         rowCount={patterns.length}
+                        
                     />
                     <TableBody>
                     {stableSort(patterns, getComparator(order, orderBy))
@@ -222,7 +249,7 @@ const EnhancedTable = () => {
                             >
                             {pattern.id}
                             </TableCell>
-                            <TableCell align='left' key={pattern.name} >{pattern.name}</TableCell>
+                            <TableCell align='left' key={pattern.name}>{pattern.name}</TableCell>
                             <TableCell align='left' key={pattern.craft}>{pattern.craft}</TableCell>
                             <TableCell align='left' key={pattern.difficulty}>{pattern.difficulty}</TableCell>
                             <TableCell align='right' key={pattern.hookSize} >{pattern.hookSize}</TableCell>
@@ -233,6 +260,17 @@ const EnhancedTable = () => {
                                         selected={isItemSelected}
                                         >  
                                     <DeleteIcon/>
+                                    </IconButton>
+                                </Tooltip>
+                            </TableCell>
+                            <TableCell align='right'>
+                                <Tooltip title='Edit'>
+                                    <IconButton 
+                                        onClick={() => editPattern(pattern.id)}
+                                        selected={isItemSelected}
+
+                                        >  
+                                    <ModeEditOutlineIcon/>
                                     </IconButton>
                                 </Tooltip>
                             </TableCell>
@@ -256,29 +294,35 @@ const EnhancedTable = () => {
                 component='div'
                 count={patterns.length}
                 rowsPerPage={rowsPerPage}
-                page={page}
+                page={(page > 0 && patterns.length < rowsPerPage) ? 0 : page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}  
                 />
             </Paper>
+            <div className='dataCreate'
+                sx={{height:100}}
+            >
                 <FormControlLabel
                     control={<Switch checked={dense} onChange={handleChangeDense}/>}
                     label='Dense padding'
                 />
-                <div className='dataCreate'>
-                <Button onClick={onClickpatternEditForm} variant='contained' className='dataformpageButton'>Pattern Create</Button>
-                
-                </div>
+                <Button onClick={onClickpatternEditForm} 
+                variant='contained' 
+                className='dataformpageButton'
+                sx={{m: 1 }}
+                >Pattern Create
+                </Button>
+            </div>
                 {newPatternChange ? 
                 <div className='dataFormPage'>
                     <DataForm/>
-                    <Button 
-                    variant='contained' sx={{m: 1 }}
-                    onClick={onClickpatternEditFormClose} 
-                    className='dataformpageButton'
-                    >
-                    Pattern Create Closed
-                    </Button>
+                        <Button 
+                        variant='contained' sx={{m: 1 }}
+                        onClick={onClickpatternEditFormClose} 
+                        className='dataformpageButton'
+                        >
+                        Pattern Create Closed
+                        </Button>
                     </div>
                 :null}
             </Box>}

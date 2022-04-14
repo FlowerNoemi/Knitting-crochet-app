@@ -5,3 +5,7 @@
 .dataFormPageBtnBlock > .dataformpageButton:hover {
     background-color: #620f3b;;
 }
+
+.dataFormPageBtnBlock > .dataformpageButton:disabled  {
+    background-color: #c7c0c3;;
+}

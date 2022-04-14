@@ -1,5 +1,8 @@
-.box {
-background-color: aliceblue;
+.patternCardContainer > .dataformpageButton {
+    background-color: #78154a;;
 
 }
 
+.patternCardContainer > .dataformpageButton:hover {
+    background-color: #78154a;;
+}

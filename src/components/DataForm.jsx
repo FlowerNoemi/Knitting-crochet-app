@@ -9,7 +9,6 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 
-
 const MultilineTextFields = () => {
 	const [disabled, setDisabled] = useState(true);
     const [data, setData] = useState({
@@ -20,9 +19,9 @@ const MultilineTextFields = () => {
       url:'',
     });
 
+
 	const headers = {
 		'Content-Type': 'application/json',
-		'Authorization': 'JWT fefege...'
 	};
 
     const handleChange = (e) => {
@@ -51,7 +50,6 @@ const MultilineTextFields = () => {
 	useEffect(() => {
 		CheckData();
 	});
-
 
     const handleSubmit = async (e) => {    
 		
@@ -82,6 +80,7 @@ const MultilineTextFields = () => {
         }).catch((error) => {
 			console.log('error msg', error);
 		});  
+		
     };    
    
     return (
@@ -175,10 +174,12 @@ const MultilineTextFields = () => {
                 <div className='dataFormPageBtnBlock'>
 					<Button 
 						type='submit'
-						onClick={(e) =>handleSubmit(e)} 
+						onClick={(e) =>  handleSubmit(e)} 
 						disabled={disabled && disabled} 
 						variant='contained' sx={{m: 1 }} 
-						className='dataformpageButton' >
+						className='dataformpageButton'
+
+						>
 						New Pattern
 					</Button> 
 				</div>

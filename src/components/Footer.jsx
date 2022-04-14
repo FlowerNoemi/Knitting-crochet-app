@@ -9,11 +9,10 @@ import CopyrightIcon from '@mui/icons-material/Copyright';
 
 const Footer = () => {
   return (
+      
         <Container className='footerContainer' maxWidth='xxl'  >
             <Toolbar className='ToolBarContainer'  disableGutters  component='div'>
-            
             <Box sx={{ mr: 2 }}>
-            
                 <Typography variant="subtitle2" gutterBottom component="div" sx={{ mb: 1}}>
                     <CopyrightIcon fontSize='small'/> 2022 FlowerNoemi 
                     <LocalFloristIcon fontSize='small'/>

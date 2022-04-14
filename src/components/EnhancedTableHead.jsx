@@ -54,6 +54,12 @@ const EnhancedTableHead = (props) => {
 		disablePadding: false,
 		label: 'Delete',
 		},
+		{
+		id: 'Edit',
+		numeric: true,
+		disablePadding: false,
+		label: 'Edit',
+		},
 	];
   
     return (

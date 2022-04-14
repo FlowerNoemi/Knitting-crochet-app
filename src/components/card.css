@@ -1,14 +1,13 @@
 .cardBox {
-    background-color: #5185a0;
+    width: 300px;
 }
 
-
-.craftBox {
+.cardBox > .craftBox {
     padding: 10px;
 
 }
 
-.craftBox > .craftLabel {
+.cardBox > .craftBox > .craftLabel {
     background-color: rgb(212, 168, 168);
 
 }
