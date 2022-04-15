@@ -9,8 +9,9 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 
-const MultilineTextFields = () => {
+const EditPattern = ({name, craft, difficulty, hookSize,url, value }) => {
 	const [disabled, setDisabled] = useState(true);
+	const [inputClick , setInputClick] = useState(false)
     const [data, setData] = useState({
       name:'',
       craft:'',
@@ -25,15 +26,18 @@ const MultilineTextFields = () => {
 	};
 
     const handleChange = (e) => {
-      const value = e.target.value;
-      setData({
-        ...data,
-        [e.target.name]: value
-      });
-      
-	  
+		setInputClick(true)
+		console.log(e.target.value)
+		const value = e.target.value;
+		console.log(value)
+		setData({
+		  ...data,
+		  [e.target.name]: value
+		});
+
     };
-	const CheckData = (e) => {
+
+/*	const CheckData = (e) => {
 		const craftData = data.craft;
 		const nameData = data.name;
 		const hookSizeData = data.hookSize;
@@ -45,13 +49,13 @@ const MultilineTextFields = () => {
 		if(craftData === '' || nameData.length === 0 || hookSizeData.length === 0 || urlData.length === 0) {
 			setDisabled(true)
 		}
-	};
+	}; 
 
 	useEffect(() => {
 		CheckData();
-	});
+	});*/
 
-    const handleSubmit = async (e) => {    
+    const handleSubmit = async (e, id) => {    
 		
         e.preventDefault();
       const formData = {
@@ -63,7 +67,7 @@ const MultilineTextFields = () => {
 		
       };
 	  
-        await axios.post('http://localhost:8080/api/v1/pattern/patterns', formData, {
+        await axios.put(`http://localhost:8080/api/v1/pattern/patterns/:${id}`, formData, {
 			headers:headers
 		})
 		.then((response) => {
@@ -100,8 +104,9 @@ const MultilineTextFields = () => {
                     multiline
                     maxRows={4}
                     value={data.name}
-                    onChange={(e) => handleChange(e) }
-					onKeyUp={(e) =>  CheckData(e)}
+					placeholder={name}
+                    onClick={(e) => handleChange(e) }
+			
                     />
                 </div>
 				<div>
@@ -114,7 +119,7 @@ const MultilineTextFields = () => {
 								label='Craft'
 								name='craft'
 								onChange={(e) => handleChange(e)}
-								onClick={(e) => CheckData(e) }
+			
 							>
 								<MenuItem value=''>
 									None
@@ -134,7 +139,7 @@ const MultilineTextFields = () => {
 								label='Difficulty'
 								name='difficulty'
 								onChange={(e) => handleChange(e)}
-								onClick={(e) => CheckData(e) }
+
 							>
 								<MenuItem value=''>
 									None
@@ -154,8 +159,8 @@ const MultilineTextFields = () => {
 						multiline
 						maxRows={4}
 						value={data.hookSize}
+						placeholder={hookSize}
 						onChange={(e) => handleChange(e)}
-						onKeyUp={(e) =>  CheckData(e)}
 						/>
                 </div>
                 <div>
@@ -167,8 +172,9 @@ const MultilineTextFields = () => {
 						multiline
 						maxRows={4}
 						value={data.url}
+						placeholder={url}
 						onChange={(e) => handleChange(e)}
-						onKeyUp={(e) =>  CheckData(e)}
+
 						/>
                 </div>
                 <div className='dataFormPageBtnBlock'>
@@ -187,4 +193,4 @@ const MultilineTextFields = () => {
   );
 }
 
-export default MultilineTextFields;
+export default EditPattern;

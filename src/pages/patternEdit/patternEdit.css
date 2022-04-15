@@ -13,3 +13,19 @@
 .dataFormPage > .dataformpageButton:hover , .dataCreate > .dataformpageButton:hover  {
     background-color: #620f3b;;
 }
+
+.dataFormPageEdit {
+    position: fixed;
+    top: 50px;
+    background-color: #f3f3f1;
+    left: 20%
+    
+}
+
+.dataFormPageEdit > .dataformpageButton  {
+    background-color: #78154a;;
+}
+
+.dataFormPageEdit > .dataformpageButton:hover  {
+    background-color: #620f3b;;
+}

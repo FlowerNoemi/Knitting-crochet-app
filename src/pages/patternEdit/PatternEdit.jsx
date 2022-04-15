@@ -21,7 +21,9 @@ import {getAllPatterns} from '../../components/httpsreq/patterns';
 import { Button } from '@mui/material';
 import DataForm from '../../components/DataForm';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
-import './patternEdit.css'
+import './patternEdit.css';
+import EditPattern from '../../components/Editpattern';
+
 
 
 const EnhancedTable = () => { 
@@ -30,11 +32,12 @@ const EnhancedTable = () => {
     const [selected, setSelected] = useState([]);
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(false);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [patterns, setPatterns] = useState(['']);
     const [loading, setLoading] = useState(false);
     const [newPatternChange, setnewPatternChange] = useState(false);
-
+    const [previous, setPrevious] = useState(false);
+    const [filteredResults, setFilteredResults] = useState([]);
 
     const loadPatterns = async ()  => {
         try {
@@ -55,8 +58,7 @@ const EnhancedTable = () => {
     }
     }, [patterns]); */
         
-
-
+    
 
     useEffect(() => {
         setLoading(true);
@@ -89,21 +91,42 @@ const EnhancedTable = () => {
 
 
     const editPattern = (id) => {
+        console.log(id) 
         if(selected.length > 0) {
             console.log('cica')
-            
+            setPrevious(true)  
         }
     }
+
+    const selectedPattern = (id) => {
+            console.log(id)
+            const filteredData = patterns.filter(pattern => pattern.id === id);
+            console.log(filteredData.id)
+            setFilteredResults(filteredData)
+    }
+
+
  
+    
+    const onClickpatternEditFormClose = () =>  {
+        setnewPatternChange(false);
+        loadPatterns()
+        setPrevious(false);
+    }
+
+
+
     const onClickpatternEditForm = () => {
         setnewPatternChange(true);
     }
 
-    const onClickpatternEditFormClose = () =>  {
+    const onClickpatternNewFormClose = () =>  {
         setnewPatternChange(false);
         loadPatterns()
         setLoading(true);
     }
+
+
     const descendingComparator = (a, b, orderBy) => {
     if (b[orderBy] < a[orderBy]) {
         return -1;
@@ -173,12 +196,13 @@ const EnhancedTable = () => {
 
     const handleChangeDense = (event) => {
     setDense(event.target.checked);
+    
     };
 
     const isSelected = (id) => selected.indexOf(id) !== -1;
     
     const emptyRows =
-    page > 0 ? Math.max(0, (0 + page) * rowsPerPage - patterns.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - patterns.length) : 0;
 
     return (
         <div>
@@ -220,7 +244,7 @@ const EnhancedTable = () => {
                     .map((pattern, id) => {
                             const isItemSelected = isSelected(id);
                             const labelId = `enhanced-table-checkbox-${id}`;
-                        return (
+                        return ( 
                         <TableRow
                             hover
                             onClick={(event) => handleClick(event, id)}
@@ -239,6 +263,7 @@ const EnhancedTable = () => {
                             }}
                             />
                             </TableCell>
+                             
                             <TableCell
                                 component='th'
                                 id={labelId}
@@ -253,11 +278,13 @@ const EnhancedTable = () => {
                             <TableCell align='left' key={pattern.craft}>{pattern.craft}</TableCell>
                             <TableCell align='left' key={pattern.difficulty}>{pattern.difficulty}</TableCell>
                             <TableCell align='right' key={pattern.hookSize} >{pattern.hookSize}</TableCell>
+                            
                             <TableCell align='right'>
                                 <Tooltip title='Delete'>
                                     <IconButton 
                                         onClick={() => deletePattern(pattern.id)}
                                         selected={isItemSelected}
+                                        
                                         >  
                                     <DeleteIcon/>
                                     </IconButton>
@@ -266,16 +293,16 @@ const EnhancedTable = () => {
                             <TableCell align='right'>
                                 <Tooltip title='Edit'>
                                     <IconButton 
-                                        onClick={() => editPattern(pattern.id)}
-                                        selected={isItemSelected}
-
-                                        >  
+                                        onClick={() => {editPattern(pattern.id) ; selectedPattern(pattern.id)}}
+                                        selected={isItemSelected} 
+                                      > 
                                     <ModeEditOutlineIcon/>
                                     </IconButton>
                                 </Tooltip>
                             </TableCell>
                         </TableRow>
                         );
+
                         })}
                         {emptyRows > 0 && (
                         <TableRow
@@ -290,11 +317,11 @@ const EnhancedTable = () => {
                 </Table>
                 </TableContainer>
                 <TablePagination
-                rowsPerPageOptions={[5, 10, 25]}
+                rowsPerPageOptions={[ 10, 25]}
                 component='div'
                 count={patterns.length}
                 rowsPerPage={rowsPerPage}
-                page={(page > 0 && patterns.length < rowsPerPage) ? 0 : page}
+                page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}  
                 />
@@ -318,13 +345,37 @@ const EnhancedTable = () => {
                     <DataForm/>
                         <Button 
                         variant='contained' sx={{m: 1 }}
-                        onClick={onClickpatternEditFormClose} 
+                        onClick={onClickpatternNewFormClose} 
                         className='dataformpageButton'
                         >
                         Pattern Create Closed
                         </Button>
                     </div>
                 :null}
+                {previous ?
+                
+                <div className='dataFormPageEdit'>
+
+                {filteredResults.length > 0 && filteredResults.map((result) => (
+                <EditPattern
+                selected={result.id}
+                key={result.id}
+                name={result.name}
+                craft={result.craft}
+                difficulty={result.difficulty}
+                hookSize={result.hookSize}
+                url={result.url}
+                /> ))}
+                
+                <Button 
+                        variant='contained' sx={{m: 1 }}
+                        onClick={onClickpatternEditFormClose} 
+                        className='dataformpageButton'
+                        >
+                        Pattern Create Closed
+                        </Button>
+                </div> 
+                :null }
             </Box>}
         </div>
     );
