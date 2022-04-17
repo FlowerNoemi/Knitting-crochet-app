@@ -13,7 +13,7 @@ const patterns = [
         name: 'Easy Diagonal Shawl Free Knitting Pattern',
         craft: 'Knitting',
         difficulty: 'easy',
-        hookSize: 8,
+        hookSize: '8 US',
         url: 'https://images4-g.ravelrycache.com/uploads/NobleKnits/610517754/diagonalshawl_medium2.jpeg',
         
     },
@@ -22,7 +22,7 @@ const patterns = [
         name: 'Crochet Christmas gnome ornament',
         craft: 'Crochet',
         difficulty: 'easy',
-        hookSize: 1.75,
+        hookSize: '1.75 mm',
         url: 'https://1.bp.blogspot.com/-oVb2rE7YCSc/Xful7-hPfqI/AAAAAAAACYY/GPfupYpV2pQS2FNP2sVfzklR6yrfjl3bwCLcBGAsYHQ/s1600/christmas-gnome-ornament.jpg',
         
     },
@@ -31,7 +31,7 @@ const patterns = [
         name: 'Dumpling Kitty',
         craft: 'Crochet',
         difficulty: 'medium',
-        hookSize: 3.25,
+        hookSize: '3.25 mm',
         url: 'https://www.amigurumi.com/images/amigurumi-159Dumpling-Kitty.jpeg',
         
     },
@@ -40,7 +40,7 @@ const patterns = [
         name: 'Baby Disney',
         craft: 'Crochet',
         difficulty: 'difficult',
-        hookSize: 2,
+        hookSize: '2 mm',
         url: 'https://www.suenhosblanditos.com/wp-content/uploads/2018/03/disney-amigurumi-crochet-patterns.jpg',
         
     },
@@ -49,7 +49,7 @@ const patterns = [
         name: 'Segel',
         craft: 'Knitting',
         difficulty: 'easy',
-        hookSize: 3,
+        hookSize: '3 mm',
         url: 'http://www.meermaedchen.com/wp-content/uploads/2014/10/IMG_0325.jpg',
         
     },
@@ -58,7 +58,7 @@ const patterns = [
         name: 'By the Bay Backpack',
         craft: 'Crochet',
         difficulty: 'medium',
-        hookSize: 3.75,
+        hookSize: '3.75 mm',
         url: 'https://i.pinimg.com/564x/b2/49/9d/b2499d4c3e626b9da688bc24693f6e38.jpg',
         
     },

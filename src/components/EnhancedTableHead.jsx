@@ -44,7 +44,7 @@ const EnhancedTableHead = (props) => {
 		},
 		{
 		id: 'hookSize',
-		numeric: true,
+		numeric: false,
 		disablePadding: false,
 		label: 'Hook Size',
 		},

@@ -154,6 +154,7 @@ const EnhancedTable = () => {
         return;
     }
         setSelected([]);
+        
     };
 
 
@@ -163,10 +164,12 @@ const EnhancedTable = () => {
     
         if (selectedIndex === -1) {
             newSelected = newSelected.concat(selected, id);
+          
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         }
             setSelected(newSelected);
+            
         };
     
 
@@ -262,7 +265,7 @@ const EnhancedTable = () => {
                             <TableCell align='left' key={pattern.name}>{pattern.name}</TableCell>
                             <TableCell align='left' key={pattern.craft}>{pattern.craft}</TableCell>
                             <TableCell align='left' key={pattern.difficulty}>{pattern.difficulty}</TableCell>
-                            <TableCell align='right' key={pattern.hookSize} >{pattern.hookSize}</TableCell>
+                            <TableCell align='left' key={pattern.hookSize} >{pattern.hookSize}</TableCell>
                             
                             <TableCell align='right'>
                                 <Tooltip title='Delete'>
