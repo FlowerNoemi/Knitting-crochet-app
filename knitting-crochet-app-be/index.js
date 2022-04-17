@@ -85,6 +85,7 @@ app.delete('/api/v1/pattern/patterndelete/:id', (req, res) => {
 
 app.post('/api/v1/pattern/patterns', (req, res) => {
     checkDetailsOfRequest({ req, res })
+
      patterns.push({
         ...req.body,
         id: patterns.length + 1
@@ -118,12 +119,6 @@ app.get('/api/v1/pattern/patterns/:search', (req, res) => {
 function getPatterns({ id }) {
     const pattern = patterns.find((pattern) => pattern.id === parseInt(id));
     return patterns.indexOf(pattern);
-}
-
-
-function getPatternsCraft({ craft }) {
-    const pattern = patterns.filter((pattern) => pattern.craft === craft);
-    return pattern;
 }
 
 

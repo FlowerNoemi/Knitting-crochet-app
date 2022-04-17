@@ -14,7 +14,7 @@ const Footer = () => {
             <Toolbar className='ToolBarContainer'  disableGutters  component='div'>
             <Box sx={{ mr: 2 }}>
                 <Typography variant="subtitle2" gutterBottom component="div" sx={{ mb: 1}}>
-                    <CopyrightIcon fontSize='small'/> 2022 FlowerNoemi 
+                    <CopyrightIcon fontSize='small'/> 2022 Virág-Czuczor Noémi 
                     <LocalFloristIcon fontSize='small'/>
                 </Typography>
                

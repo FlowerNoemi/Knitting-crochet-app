@@ -35,14 +35,17 @@ const MultilineTextFields = () => {
     };
 	const CheckData = (e) => {
 		const craftData = data.craft;
+		const difficultyData = data.difficulty
 		const nameData = data.name;
 		const hookSizeData = data.hookSize;
 		const urlData = data.url;
-
-		if(nameData.length !== 0 && craftData.length !== 0 && hookSizeData.length !== 0 && urlData.length !== 0 ) {
-			 setDisabled(false)
+		
+		if(nameData.length !== 0 || hookSizeData.length !== 0 || urlData.length !== 0)   {
+			setDisabled(false)
 		}
-		if(craftData === '' || nameData.length === 0 || hookSizeData.length === 0 || urlData.length === 0) {
+
+
+		if(craftData.length === 0 || nameData.length === 0 || hookSizeData.length === 0 || urlData.length === 0  || difficultyData.length === 0)   {
 			setDisabled(true)
 		}
 	};
@@ -116,9 +119,6 @@ const MultilineTextFields = () => {
 								onChange={(e) => handleChange(e)}
 								onClick={(e) => CheckData(e) }
 							>
-								<MenuItem value=''>
-									None
-								</MenuItem>
 								<MenuItem value={'Knitting'}>Knitting</MenuItem>
 								<MenuItem value={'Crochet'}>Crochet</MenuItem>
 							</Select>
@@ -136,9 +136,6 @@ const MultilineTextFields = () => {
 								onChange={(e) => handleChange(e)}
 								onClick={(e) => CheckData(e) }
 							>
-								<MenuItem value=''>
-									None
-								</MenuItem>
 								<MenuItem value={'easy'}>easy</MenuItem>
 								<MenuItem value={'medium'}>medium</MenuItem>
 								<MenuItem value={'difficult'}>difficult</MenuItem>

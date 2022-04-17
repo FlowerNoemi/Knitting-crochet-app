@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState} from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
@@ -9,9 +9,7 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 
-const EditPattern = ({name, craft, difficulty, hookSize,url, value }) => {
-	const [disabled, setDisabled] = useState(true);
-	const [inputClick , setInputClick] = useState(false)
+const EditPattern = ({name, craft, difficulty, hookSize,url, patternID}) => {
     const [data, setData] = useState({
       name:'',
       craft:'',
@@ -20,67 +18,44 @@ const EditPattern = ({name, craft, difficulty, hookSize,url, value }) => {
       url:'',
     });
 
+	
 
 	const headers = {
 		'Content-Type': 'application/json',
 	};
 
+	
     const handleChange = (e) => {
-		setInputClick(true)
-		console.log(e.target.value)
-		const value = e.target.value;
-		console.log(value)
-		setData({
-		  ...data,
-		  [e.target.name]: value
-		});
-
+			const value = e.target.value;
+			setData({
+			  ...data,
+			  [e.target.name]: value
+			});
+			
     };
 
-/*	const CheckData = (e) => {
-		const craftData = data.craft;
-		const nameData = data.name;
-		const hookSizeData = data.hookSize;
-		const urlData = data.url;
 
-		if(nameData.length !== 0 && craftData.length !== 0 && hookSizeData.length !== 0 && urlData.length !== 0 ) {
-			 setDisabled(false)
-		}
-		if(craftData === '' || nameData.length === 0 || hookSizeData.length === 0 || urlData.length === 0) {
-			setDisabled(true)
-		}
-	}; 
 
-	useEffect(() => {
-		CheckData();
-	});*/
-
-    const handleSubmit = async (e, id) => {    
-		
+    const handleSubmit = async (e, {patternID}) => {    
+		console.log({patternID})
         e.preventDefault();
       const formData = {
-        name: data.name,
-        craft: data.craft,
-        difficulty: data.difficulty,
-        hookSize: data.hookSize,
-        url: data.url,
+        name: data.name || name,
+        craft: data.craft || craft,
+        difficulty: data.difficulty || difficulty,
+        hookSize: data.hookSize || hookSize,
+        url: data.url || url,
 		
       };
 	  
-        await axios.put(`http://localhost:8080/api/v1/pattern/patterns/:${id}`, formData, {
+        await axios.put(`http://localhost:8080/api/v1/pattern/patterns/${patternID}`, formData, {
 			headers:headers
 		})
 		.then((response) => {
         console.log(response.status);
 		  	if (response.status === 200) {
-				setData({
-					name:'',
-					craft:'',
-					difficulty:'',
-					hookSize:'',
-					url:'',
-			  	});
-			}
+				console.log(response.data)
+			  	};
         }).catch((error) => {
 			console.log('error msg', error);
 		});  
@@ -93,37 +68,32 @@ const EditPattern = ({name, craft, difficulty, hookSize,url, value }) => {
             sx={{'& .MuiTextField-root': { m: 1, width: '25ch' },}}
             noValidate
             autoComplete='off'
-            onSubmit={(e) =>  handleSubmit(e) } 
+            onSubmit={(e) =>  handleSubmit(e, {patternID}) } 
+
         > 
                 <div>
                     <TextField
                     id='name'
-                    label='Name'
                     name='name'
                     type='text'
                     multiline
                     maxRows={4}
                     value={data.name}
 					placeholder={name}
-                    onClick={(e) => handleChange(e) }
-			
+                    onChange={(e) => handleChange(e) }
                     />
                 </div>
 				<div>
 					<FormControl sx={{ m: 1,  width: '25ch' }}>
-						<InputLabel id='demo-simple-select-helper-label'>Craft</InputLabel>
+					<InputLabel id="demo-simple-select-helper-label">{craft}</InputLabel>
 							<Select
 								labelId='demo-simple-select-helper-label'
 								id='demo-simple-select-helper'
+								label={craft}
 								value={data.craft}
-								label='Craft'
 								name='craft'
 								onChange={(e) => handleChange(e)}
-			
 							>
-								<MenuItem value=''>
-									None
-								</MenuItem>
 								<MenuItem value={'Knitting'}>Knitting</MenuItem>
 								<MenuItem value={'Crochet'}>Crochet</MenuItem>
 							</Select>
@@ -131,19 +101,16 @@ const EditPattern = ({name, craft, difficulty, hookSize,url, value }) => {
 				</div>
 						<div>
 					<FormControl sx={{ m: 1,  width: '25ch' }}>
-						<InputLabel id='demo-simple-select-helper-label'>Difficulty</InputLabel>
+						<InputLabel id='demo-simple-select-helper-label'>{difficulty}</InputLabel>
 							<Select
 								labelId='demo-simple-select-helper-label'
 								id='demo-simple-select-helper'
 								value={data.difficulty}
-								label='Difficulty'
+								label={difficulty}
 								name='difficulty'
 								onChange={(e) => handleChange(e)}
 
 							>
-								<MenuItem value=''>
-									None
-								</MenuItem>
 								<MenuItem value={'easy'}>easy</MenuItem>
 								<MenuItem value={'medium'}>medium</MenuItem>
 								<MenuItem value={'difficult'}>difficult</MenuItem>
@@ -153,9 +120,8 @@ const EditPattern = ({name, craft, difficulty, hookSize,url, value }) => {
                 <div>
 					<TextField
 						id='hookSize'
-						label='HookSize'
 						name='hookSize'
-						type='number'
+						type='text'
 						multiline
 						maxRows={4}
 						value={data.hookSize}
@@ -166,7 +132,6 @@ const EditPattern = ({name, craft, difficulty, hookSize,url, value }) => {
                 <div>
 					<TextField
 						id='url'
-						label='Image URL'
 						name='url'
 						type='text'
 						multiline
@@ -180,13 +145,12 @@ const EditPattern = ({name, craft, difficulty, hookSize,url, value }) => {
                 <div className='dataFormPageBtnBlock'>
 					<Button 
 						type='submit'
-						onClick={(e) =>  handleSubmit(e)} 
-						disabled={disabled && disabled} 
+						onClick={(e) =>  handleSubmit(e, {patternID})} 
 						variant='contained' sx={{m: 1 }} 
 						className='dataformpageButton'
 
 						>
-						New Pattern
+						Change Pattern
 					</Button> 
 				</div>
         </Box>

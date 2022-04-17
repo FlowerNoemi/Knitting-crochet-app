@@ -38,6 +38,7 @@ const EnhancedTable = () => {
     const [newPatternChange, setnewPatternChange] = useState(false);
     const [previous, setPrevious] = useState(false);
     const [filteredResults, setFilteredResults] = useState([]);
+    const [patternID, setPatternID] = useState('')
 
     const loadPatterns = async ()  => {
         try {
@@ -49,17 +50,6 @@ const EnhancedTable = () => {
         }
     };
     
-   /* useEffect(() => {
-    let timer = setTimeout((e) => {
-        loadPatterns(e);
-        setLoading(true);
-    }, 6000)
-    return () => { clearTimeout(timer)
-    }
-    }, [patterns]); */
-        
-    
-
     useEffect(() => {
         setLoading(true);
         loadPatterns();    
@@ -89,24 +79,19 @@ const EnhancedTable = () => {
         } 
     }
 
+    
 
-    const editPattern = (id) => {
-        console.log(id) 
+    const editPattern = (id) => { 
+        setPatternID(id)
         if(selected.length > 0) {
-            console.log('cica')
             setPrevious(true)  
         }
     }
 
     const selectedPattern = (id) => {
-            console.log(id)
             const filteredData = patterns.filter(pattern => pattern.id === id);
-            console.log(filteredData.id)
             setFilteredResults(filteredData)
     }
-
-
- 
     
     const onClickpatternEditFormClose = () =>  {
         setnewPatternChange(false);
@@ -353,9 +338,7 @@ const EnhancedTable = () => {
                     </div>
                 :null}
                 {previous ?
-                
                 <div className='dataFormPageEdit'>
-
                 {filteredResults.length > 0 && filteredResults.map((result) => (
                 <EditPattern
                 selected={result.id}
@@ -365,6 +348,7 @@ const EnhancedTable = () => {
                 difficulty={result.difficulty}
                 hookSize={result.hookSize}
                 url={result.url}
+                patternID={patternID}
                 /> ))}
                 
                 <Button 
@@ -372,7 +356,7 @@ const EnhancedTable = () => {
                         onClick={onClickpatternEditFormClose} 
                         className='dataformpageButton'
                         >
-                        Pattern Create Closed
+                        Pattern Change Closed
                         </Button>
                 </div> 
                 :null }
