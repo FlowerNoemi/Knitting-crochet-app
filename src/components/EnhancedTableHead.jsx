@@ -63,7 +63,7 @@ const EnhancedTableHead = (props) => {
 	];
   
     return (
-      	<TableHead>
+      	<TableHead >
 			<TableRow>
 				<TableCell padding='checkbox'>
 				</TableCell>

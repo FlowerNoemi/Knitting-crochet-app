@@ -65,6 +65,14 @@ const patterns = [
 
 ]
 
+const messagedata =[
+    {
+        name: '',
+        mail: '',
+        message: '',
+        
+    },
+]
 
 app.get('/api/v1/pattern/port', (req, res) => {
     res.send(`The app is running on this port: ${appPort}!`)
@@ -113,7 +121,14 @@ app.get('/api/v1/pattern/patterns/:search', (req, res) => {
     res.status(200).send(filteredPattern);
 });
 
+app.post('/api/v1/message', (req, res) => {
+   
+     messagedata.push({
+        ...req.body,
+    })
+    res.status(200).send(`Message sent successfully`);
 
+})
 
 
 function getPatterns({ id }) {

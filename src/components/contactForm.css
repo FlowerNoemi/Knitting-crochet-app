@@ -1,0 +1,19 @@
+.contactFormCard {
+    background-color: #dbd4d7e0;
+    max-width: 390px;
+    margin: 0 auto;
+}
+
+
+
+.dataFormContactBtnBlock > .dataformpageButtonCont  {
+    background-color: #78154a;;
+}
+
+.dataFormContactBtnBlock > .dataformpageButtonCont:hover {
+    background-color: #620f3b;;
+}
+
+.dataFormContactBtnBlock > .dataformpageButtonCont:disabled  {
+    background-color: #c7c0c3;;
+}

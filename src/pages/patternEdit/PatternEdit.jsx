@@ -198,15 +198,15 @@ const EnhancedTable = () => {
             <p>It's loading</p>
             }
             {loading &&
-                <Box sx={{ maxWidth: '100%', mt:1, mb:5}}>
-                <Paper sx={{ width: '100%', mx: 'auto' }}>
-                    <Toolbar>
+                <Box sx={{ maxWidth: '100%', mt:1, mb:5}} >
+                <Paper sx={{ width: '100%', mx: 'auto' }} >
+                    <Toolbar className='tableEditorBox'>
                         <Typography
-                            sx={{ flex: '1 1 100%' }}
+                            sx={{ flex: '1 1 100%'}}
                             variant='h6'
                             id='tableTitle'
                             component='div'
-
+                            className='title'
                             >
                             Pattern Editor
                         </Typography>
@@ -226,7 +226,7 @@ const EnhancedTable = () => {
                         rowCount={patterns.length}
                         
                     />
-                    <TableBody>
+                    <TableBody sx={{bgcolor: '#ccb7c110'}}>
                     {stableSort(patterns, getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((pattern, id) => {

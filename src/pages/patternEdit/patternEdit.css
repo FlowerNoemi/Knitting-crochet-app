@@ -1,3 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+.tableEditorBox > .title {
+    font-family: 'Pacifico', 'Roboto', sans-serif;
+    background-color: #ccb7c199;
+    font-size: clamp(1rem, 9vw, 4rem);
+    text-align: center;
+    border-radius: 20px;
+    margin-top: 20px;
+}
+
+
+
+
 .dataFormPage {
     position: fixed;
     top: 50px;
